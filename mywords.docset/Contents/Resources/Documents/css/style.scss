@@ -1,0 +1,97 @@
+@import "compass";
+$color-a: #fff;
+$color-b: #333;
+$color-c: #2ae;
+$color-d: #666;
+$color-e: #999;
+$color-f: #f5f5f5;
+$color-g: #f3f3f3;
+$color-h: #f9b;
+
+h1, h2 { margin: 0; padding: 0; }
+.tl { text-align: left; }
+.tr { text-align: right; }
+.tc { text-align:center; }
+.l { float: left; }
+.r { float:right; }
+
+body {
+  color: $color-d;
+  font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, helvetica, sans-serif;
+  margin: 20px;
+  background: $color-g image-url("line.gif") 0 0 repeat;
+  text-align: center;
+}
+a {
+  color: $color-c;
+  text-decoration: none;
+  &:hover {
+    color: $color-h;
+    text-decoration: underline;
+  }
+}
+article {
+  background-color: $color-a;
+  color: $color-d;
+  padding: 20px;
+  margin: 20px 0;
+  font-size: 14px;
+  @include border-radius(10px);
+  border: solid 1px $color-c;
+  text-align: left;
+
+  header {
+    padding: 10px ;
+    text-align:center;
+    border-bottom: double 3px $color-h;
+    h1 {
+      font-size: 20px;
+      line-height: 20px;
+      color: $color-c; 
+      margin-bottom: 7px;;
+    }
+    small {
+      font-size: 13px;
+      font-weight: normal;
+      color: $color-e;
+      margin-left: 5px;
+    }
+    p {
+      font-weight: bold;
+      margin: 0;  
+    }
+  }
+  section {
+    margin: 20px 10px 5px;
+  }
+  blockquote {
+    border-left: solid 7px $color-g;
+    padding-left: 20px;
+    margin: 20px;
+  }
+
+  pre, code {
+    font-size: 12px;
+    font-family: Monaco, monospace;
+    line-height: 18px;
+    white-space: pre;
+    white-space: pre-wrap;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+  pre {
+    display: block;
+    padding: 8px 12px;
+    margin: 0 0 9px;
+    background-color: $color-f;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    @include border-radius(4px);
+  }
+  code {
+    display: inline-block;
+    padding: 0 4px;
+    margin: 0 3px;
+    background-color: $color-g;
+  }
+}
