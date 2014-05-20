@@ -6,6 +6,9 @@
     "express": "~4.2.0",
     "sqlite3": "~2.2.3",
     "handlebars": "~2.0.0-alpha.2",
-    "ejs": "~1.0.0"
+    "ejs": "~1.0.0",
+    "request": "~2.36.0",
+    "http": "0.0.0",
+    "body-parser": "*"
   }
 }

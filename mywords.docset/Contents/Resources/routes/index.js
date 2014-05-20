@@ -53,29 +53,35 @@ exports.add = function(req, res){
     pronounce: "ディスパッチャー"
   };
 
-  console.log(data);
-//  addRecord(data);
+//  console.log(data);
+ // addRecord(data);
   res.render('add');
 };
 
 var addRecord = function(data) {
+  console.log('addRecord', data.word);
   db = new sqlite3.Database(fileName);
   var data = [];
   db.serialize(function() {
-
+  
+    var id = 0;
+    // 登録数の取得
+    db.each("SELECT count(id) FROM searchIndex", function(err, row) {
+      id = row['count(id)'];
+    });
     db.run("INSERT INTO dic VALUES($id, $word, $title, $body, $type, $pronounce)", {
-      $id: data.id,
-      $word: data.word,
+      $id: id + 1,
+      $word: "ワード", // FIXME: data.wordだと登録されない。エンコードの問題？？
       $title: data.title,
       $body: data.body,
-      $type: data.type,
+      $type: "Notation",
       $pronounce: data.pronounce
     });
-    db.run("INSERT INTO searchIndex VALUES($id, $word, $type, $path)", {
-      $id: data.id,
-      $word: data.word,
-      $type: data.type,
-      $path: "http://localhost:3000/page/" + data.id
+    db.run("INSERT INTO searchIndex VALUES($id, $name, $type, $path)", {
+      $id: id + 1,
+      $name: data.word,
+      $type: "Notation",
+      $path: "http://localhost:3000/page/" + (id+1)
     });
     console.log('insert end');
 
@@ -113,4 +119,12 @@ exports.page = function(req, res){
 
   db.close();
 
+};
+
+/**
+ * @method exports.post
+ */
+exports.post = function(req, res) {
+  console.log('POST-->', req.body);
+  addRecord(req.body);
 };

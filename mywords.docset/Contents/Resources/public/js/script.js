@@ -20,11 +20,13 @@
     var word = util.escapeStr($('.x-input-word').val()),
         title = util.escapeStr($('.x-input-title').val()),
         body = util.escapeStr($('.x-input-body').val());
+        pronounce = util.escapeStr($('.x-input-pronounce').val());
 
-    if( util.isValue(word) && util.isValue(title) && util.isValue(body) ){
+    if( util.isValue(word) && util.isValue(title) && util.isValue(pronounce) && util.isValue(body) ){
         var data = JSON.stringify({
           word: word,
           title: title,
+          pronounce: pronounce,
           body: body
         });
         requestPost(data, 'post');
@@ -77,6 +79,7 @@
    * @param url 送信先path
    */
   var requestPost = function(json, url){
+    console.log('requestPost', json);
 
     $.ajax({
       type: 'post',
