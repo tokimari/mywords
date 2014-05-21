@@ -111,3 +111,40 @@ article code {
   margin: 0 3px;
   background-color: #f3f3f3;
 }
+
+dl {
+  margin: 0;
+}
+
+dd {
+  margin: 0 15px 10px 0;
+}
+dd input, dd textarea {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  width: 100%;
+  line-height: 20px;
+  padding: 5px;
+  border: solid 1px #999999;
+}
+dd input {
+  height: 20px;
+}
+
+button {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  color: #666666;
+  width: 100%;
+  background: #f3f3f3 url('../img/line.gif?1399816648') 0 0 repeat;
+  height: 30px;
+  font-size: 12px;
+  text-align: center;
+  border: solid 1px #999999;
+}

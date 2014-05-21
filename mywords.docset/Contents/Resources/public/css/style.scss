@@ -95,3 +95,27 @@ article {
     background-color: $color-g;
   }
 }
+dl { margin: 0; }
+dd {
+  margin: 0 15px 10px 0;
+  input, textarea {
+    @include border-radius(5px);
+    width: 100%;
+    line-height: 20px;
+    padding: 5px;
+    border: solid 1px $color-e;
+  }
+  input {
+    height: 20px;
+  }
+}
+button {
+  @include border-radius(5px);
+  color: $color-d;
+  width: 100%;
+  background: $color-g image-url("line.gif") 0 0 repeat;
+  height: 30px;
+  font-size: 12px;
+  text-align: center;
+  border: solid 1px $color-e;
+}

@@ -1,30 +1,26 @@
 var sqlite3 = require('sqlite3').verbose(),
-    fileName = __dirname + '/../docSet.dsidx';
+    fileName = __dirname + '/../docSet.dsidx',
+    id = 0;
 
 /**
  * @method exports.index
  * indexページ
- * @param req request data.
- * @param res response data.
+ * @param {Object} req Request Data.
+ * @param {Object} res Response Data.
  */
 exports.index = function(req, res){
   
-  console.log('----> index');
-  
-  db = new sqlite3.Database(fileName);
   var data = [];
+  var db = new sqlite3.Database(fileName);
   db.serialize(function() {
 
+    // 登録単語一覧の取得
     var query = "SELECT id, word, title FROM dic";
     db.each(query, function (err, row) {
       data.push({
         id: row.id,
-        word: row.word,
-        title: row.title
-      });
-      // データ出力
-      res.render('index', {
-        data: data
+        word: util.unEscapeStr(row.word),
+        title: util.unEscapeStr(row.title)
       });
     });
 
@@ -32,86 +28,39 @@ exports.index = function(req, res){
 
   db.close();
 
-};
-
-
-/**
- * @method exports.add
- * 単語の登録
- * @param req request data.
- * @param res response data.
- */
-exports.add = function(req, res){
-  
-  console.log('----> add');
-  var data = {
-    id: 1,
-    word: "dispatcher",
-    title: "発送係; 急送[信]者.",
-    body: "<p> CPU(中央処理装置)がタスクを実行するときの実行順序をスケジュールするルーチンを指す.  OS(オペレーティングシステム)の機能単位の一つ.  コード中には、getDispatcherというメソッドとして、ページの名前と遷移先のパスを引数に、ページの切り替えを行っていました。実際に遷移を実行するメソッドと、振り分けを行うメソッドを分けることで、保守しやすくしているようです。</p>",
-    type: "Notation",
-    pronounce: "ディスパッチャー"
-  };
-
-//  console.log(data);
- // addRecord(data);
-  res.render('add');
-};
-
-var addRecord = function(data) {
-  console.log('addRecord', data.word);
-  db = new sqlite3.Database(fileName);
-  var data = [];
-  db.serialize(function() {
-  
-    var id = 0;
-    // 登録数の取得
-    db.each("SELECT count(id) FROM searchIndex", function(err, row) {
-      id = row['count(id)'];
+  // FIXME: async task
+  setTimeout(function(){
+    console.log(data);
+    res.render('index', {
+      data: data
     });
-    db.run("INSERT INTO dic VALUES($id, $word, $title, $body, $type, $pronounce)", {
-      $id: id + 1,
-      $word: "ワード", // FIXME: data.wordだと登録されない。エンコードの問題？？
-      $title: data.title,
-      $body: data.body,
-      $type: "Notation",
-      $pronounce: data.pronounce
-    });
-    db.run("INSERT INTO searchIndex VALUES($id, $name, $type, $path)", {
-      $id: id + 1,
-      $name: data.word,
-      $type: "Notation",
-      $path: "http://localhost:3000/page/" + (id+1)
-    });
-    console.log('insert end');
+  }, 1000);
 
-  });
 
-  db.close();
 };
 
 /**
  * @method exports.page
  * 各ページの検索と出力
- * @param req request data.
- * @param res response data.
+ * @param {Object} req Request Data.
+ * @param {Object} res Response Data.
  */
 exports.page = function(req, res){
   
-  var id = req.param('id');
+  var wordId = req.param('id'),
+      db = new sqlite3.Database(fileName);
 
-  db = new sqlite3.Database(fileName);
   db.serialize(function() {
 
-    var query = "SELECT word, title, body, pronounce FROM dic WHERE id=" + id;
+    // 指定の単語データの出力
+    var query = "SELECT word, title, body, pronounce FROM dic WHERE id=" + wordId;
     db.get(query, function (err, row) {
-      // データ出力
       res.render('page', {
-        id: id,
-        word: row.word,
-        title: row.title,
-        body: row.body,
-        pronounce: row.pronounce
+        id: wordId,
+        word: util.unEscapeStr(row.word),
+        title: util.unEscapeStr(row.title),
+        body: util.unEscapeStr(row.body),
+        pronounce: util.unEscapeStr(row.pronounce)
       });
     });
 
@@ -122,9 +71,73 @@ exports.page = function(req, res){
 };
 
 /**
+ * @method exports.add
+ * 単語登録フォーム
+ * @param {Object} req Request Data.
+ * @param {Object} res Response Data.
+ */
+exports.add = function(req, res){
+  // 登録数の取得
+  var db = new sqlite3.Database(fileName);
+  db.serialize(function() {
+    db.each("SELECT count(id) FROM searchIndex", function(err, row) {
+      id = row['count(id)'];
+    });
+  });
+  db.close();
+  res.render('add');
+};
+
+/**
  * @method exports.post
+ * postのデータを登録
+ * @param {Object} req Request Data.
+ * @param {Object} res Response Data.
  */
 exports.post = function(req, res) {
-  console.log('POST-->', req.body);
-  addRecord(req.body);
+  var db = new sqlite3.Database(fileName),
+      data = req.body,
+      type = "Notation",
+      pagePath = "http://localhost:3000/page/";
+
+  id ++;
+
+  db.serialize(function() {
+
+    // 辞書DBに登録
+    db.run("INSERT OR IGNORE INTO dic(word, title, body, type, pronounce) VALUES($word, $title, $body, $type, $pronounce)", {
+      $word: data.word,
+      $title: data.title,
+      $body: data.body,
+      $type: type,
+      $pronounce: data.pronounce
+
+    // indexDBに登録
+    }).run("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES($name, $type, $path)", {
+      $name: data.word,
+      $type: type,
+      $path: pagePath + id
+    });
+  });
+  console.log('add data.', id, data);
+
+  db.close();
+};
+  
+
+var util = {
+  /**
+   * @method unEscapeStr
+   * 表示のためにエスケープした文字列を戻す処理
+   * @param str チェックする文字列
+   * @return str 処理後の文字列
+   */
+  unEscapeStr : function(str) {
+    str = str.replace(/%26/,"&");
+    str = str.replace(/%22/g,'"');
+    str = str.replace(/%27/g,"'");
+    str = str.replace(/\;/g,";");
+
+    return str;
+  }
 };

@@ -15,25 +15,40 @@
    * @param e
    */
   var onAddBtn = function(e){
+    var data = getParams();
 
-    console.log('click add btn');
-    var word = util.escapeStr($('.x-input-word').val()),
-        title = util.escapeStr($('.x-input-title').val()),
-        body = util.escapeStr($('.x-input-body').val());
-        pronounce = util.escapeStr($('.x-input-pronounce').val());
-
-    if( util.isValue(word) && util.isValue(title) && util.isValue(pronounce) && util.isValue(body) ){
+    if( util.isValue(data.word) && util.isValue(data.title) && util.isValue(data.pronounce) && util.isValue(data.body) ){
         var data = JSON.stringify({
-          word: word,
-          title: title,
-          pronounce: pronounce,
-          body: body
+          word: data.word,
+          title: data.title,
+          pronounce: data.pronounce,
+          body: data.body
         });
         requestPost(data, 'post');
+        clearForm();
       } else {
       alert('空欄があります。');
     }
 
+  };
+
+  /**
+   * @method getParams
+   */
+  var getParams = function() {
+    return {
+      word: util.escapeStr($('.x-input-word').val()),
+      title: util.escapeStr($('.x-input-title').val()),
+      body: util.escapeStr($('.x-input-body').val()),
+      pronounce: util.escapeStr($('.x-input-pronounce').val())
+    };
+  };
+
+  /**
+   * @method clearForm
+   */
+  var clearForm = function() {
+    $('input, textarea').val('');
   };
 
   /**
