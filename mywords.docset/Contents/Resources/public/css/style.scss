@@ -34,7 +34,8 @@ article {
   background-color: $color-a;
   color: $color-d;
   padding: 20px;
-  margin: 20px 0;
+  margin: 20px auto;
+  max-width: 800px;
   font-size: 14px;
   @include border-radius(10px);
   border: solid 1px $color-c;

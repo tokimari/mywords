@@ -44,7 +44,8 @@ article {
   background-color: white;
   color: #666666;
   padding: 20px;
-  margin: 20px 0;
+  margin: 20px auto;
+  max-width: 800px;
   font-size: 14px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
