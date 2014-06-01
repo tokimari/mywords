@@ -4,13 +4,14 @@
 
 ついでにDash用ドックセットにしたくて作りました。Dash内で<code>mw:</code>で検索できます。
 
-著作権的にやばいとあれなので更新はしません。
+著作権的にやばいとあれな内容を若干修正しています。
+
+気が向いたら更新します。
 
 [Github - tokimari](https://github.com/tokimari "GitHub - tokimari")
 
-追加の仕方：
+ローカルでの起動、追加の仕方：
 
-1. HTMLに書く
-2. <code>$ cd mywords.docset/Contents/Resources/</code>
-3. <code>$ sqlite3 .docset/Contents/</code>
-4. <code>INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES ('name', 'type', 'path');</code>
+1. <code>$ node app.js</code>  サーバ起動
+2. http://localhost:3000/add にアクセス
+3. 必要項目入力

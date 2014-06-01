@@ -13,10 +13,9 @@
 <article>
   追加の仕方：<br>
   <ol>
-    <li>HTMLに書く</li>
-    <li><code>$ cd mywords.docset/Contents/Resources/</code></li>
-    <li><code>$ sqlite3 .docset/Contents/</code></li>
-    <li><code>INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES ('name', 'type', 'path');</code></li>
+    <li>1. <code>$ node app.js</code>  サーバ起動</li>
+    <li>2. <a href="http://localhost:3000/add">http://localhost:3000/add</a>にアクセス</li>
+    <li>3. 必要項目入力</li>
   </ol>
 <ul>
   <% for(var i in data) { %>
